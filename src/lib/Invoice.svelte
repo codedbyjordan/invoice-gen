@@ -12,9 +12,18 @@
   export let items: InvoiceItem[];
 
   let total = 0;
+  let invoice;
 
   const exportAsPDF = () => {
-    const pdf = new jsPDF();
+    const pdf = new jsPDF({
+      unit: "px",
+    });
+    pdf.html(invoice, {
+      html2canvas: {
+        scale: 0.5,
+      },
+      callback: (doc) => doc.save("test.pdf"),
+    });
   };
 </script>
 
@@ -22,11 +31,11 @@
   on:click={exportAsPDF}
   class="absolute right-2 top-2 w-10 h-10 bg-gray-300 text-gray-500 p-1 rounded-md hover:text-gray-400"
 >
-  <TiExport /></button
->
+  <TiExport />
+</button>
 
 <div class="w-full min-h-screen font-inter flex justify-center">
-  <div bind:this={} class="w-[75%] mt-12">
+  <div bind:this={invoice} class="w-[75%] mt-12">
     <div class="w-full flex justify-between items-center">
       <h1 class="text-4xl font-bold">{businessName}</h1>
       <h1 class="uppercase text-3xl font-bold">Invoice</h1>
